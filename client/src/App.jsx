@@ -1,11 +1,28 @@
-import Home from "./pages/Home"
+import { Routes, Route, Navigate } from "react-router";
+import Home from "./pages/Home.jsx";
+import Board from "./pages/Board.jsx";
+import { useVisit } from "./context/VisitContext.jsx";
 
 const App = () => {
-  return (
-    <div>
-      <Home />
-    </div>
-  )
-}
+  const { isFirstVisit, markVisited } = useVisit();
 
-export default App
+  if (isFirstVisit === null) return null;
+
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          isFirstVisit ? (
+            <Home onEnter={markVisited} />
+          ) : (
+            <Navigate to="/board" replace />
+          )
+        }
+      />
+      <Route path="/board" element={<Board />} />
+    </Routes>
+  );
+};
+
+export default App;
