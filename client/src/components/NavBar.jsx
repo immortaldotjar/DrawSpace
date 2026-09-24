@@ -4,10 +4,10 @@ const links = ["Home", "Board", "About", "Contact"];
 
 const Navbar = ({ onStart }) => {
   return (
-    <nav className="flex items-center justify-between bg-white rounded-full px-4 py-3">
-      <div className="w-9 h-9 rounded-full bg-brand-dark" />
+    <nav className="row-sm justify-between bg-white pill">
+      <div className="btn-circle bg-brand-dark" />
 
-      <ul className="hidden md:flex items-center gap-8 text-sm text-neutral-700">
+      <ul className="hidden md:flex row-md text-sm text-neutral-700">
         {links.map((link) => (
           <li key={link} className="cursor-pointer hover:text-neutral-900">
             {link}
@@ -15,14 +15,11 @@ const Navbar = ({ onStart }) => {
         ))}
       </ul>
 
-      <div className="flex items-center gap-3">
-        <button
-          onClick={onStart}
-          className="bg-neutral-900 text-white text-sm px-5 py-2.5 rounded-full"
-        >
+      <div className="row-sm">
+        <button onClick={onStart} className="btn-dark text-sm pill">
           Start Drawing
         </button>
-        <div className="w-9 h-9 rounded-full bg-neutral-900" />
+        <div className="btn-circle bg-neutral-900" />
       </div>
     </nav>
   );
