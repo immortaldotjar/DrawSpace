@@ -2,14 +2,10 @@ import React from "react";
 
 const ToolButton = ({ label, active, onClick }) => {
     return (
-        <button
-            onClick={onClick}
-            className={`w-11 h-11 rounded-xl flex items-center justify-center text-sm font-medium transition-colors ${active ? "bg-neutral-900 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
-                }`}
-        >
+        <button onClick={onClick} className={`btn-icon ${active ? "btn-icon-active" : "btn-icon-idle"}`}>
             {label}
         </button>
     );
 };
 
-export default ToolButton
+export default ToolButton;
