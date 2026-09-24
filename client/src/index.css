@@ -5,8 +5,93 @@
   --color-brand-dark: #4f5730;
   --color-cream: #f7f3d6;
   --color-mint: #a9d6a3;
+
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
 }
 
 body {
   @apply bg-white text-neutral-900 antialiased;
+}
+
+@layer components {
+  .frame {
+    @apply p-md md:p-lg;
+  }
+
+  .surface {
+    @apply rounded-xl;
+  }
+
+  .card {
+    @apply rounded-md p-sm bg-white;
+  }
+
+  .panel {
+    @apply rounded-lg p-sm bg-white;
+  }
+
+  .pill {
+    @apply rounded-full px-lg py-sm;
+  }
+
+  .stack-sm {
+    @apply flex flex-col gap-sm;
+  }
+
+  .row-sm {
+    @apply flex items-center gap-sm;
+  }
+
+  .row-md {
+    @apply flex items-center gap-md;
+  }
+
+  .btn-dark {
+    @apply bg-neutral-900 text-white hover:bg-neutral-800 transition-colors;
+  }
+
+  .btn-outline {
+    @apply border border-neutral-900 text-neutral-900 hover:bg-neutral-900 hover:text-white transition-colors;
+  }
+
+  .btn-circle {
+    @apply w-9 h-9 rounded-full;
+  }
+
+  .btn-icon {
+    @apply w-11 h-11 rounded-xl flex items-center justify-center text-sm font-medium transition-colors;
+  }
+
+  .btn-icon-active {
+    @apply bg-neutral-900 text-white;
+  }
+
+  .btn-icon-idle {
+    @apply bg-neutral-100 text-neutral-700 hover:bg-neutral-200;
+  }
+
+  .shadow-panel {
+    @apply shadow-lg;
+  }
+
+  .divider-x {
+    @apply w-px h-8 bg-neutral-200 mx-xs;
+  }
+
+  .canvas-full {
+    @apply w-screen h-screen touch-none bg-white;
+  }
+
+  .text-muted {
+    @apply text-neutral-500;
+  }
 }
