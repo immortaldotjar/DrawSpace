@@ -1,4 +1,6 @@
-export const renderElem = (rc, elements) => {
+import React from "react";
+
+const renderElem = (rc, elements) => {
     elements.forEach((ele) => {
         if (ele.type === "pencil") {
             for (let i = 0; i < ele.points.length - 1; i++) {
@@ -11,4 +13,6 @@ export const renderElem = (rc, elements) => {
             rc.draw(ele.roughElement);
         }
     });
-};
+}
+
+
