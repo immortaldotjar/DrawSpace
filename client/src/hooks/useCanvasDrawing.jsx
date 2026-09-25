@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { createElement } from "../components/CanvasComps/elements";
-import { findElementAtPoint } from "../components/CanvasComps/geometry";
-
-export const useCanvasDrawing = (elements, setElements, tool, color) => {
+import { createElement, moveElement } from "../components/CanvasComps/elements";
+import { findElementAtPoint, getBoundingBox } from "../components/CanvasComps/geometry";
+import { useDraw } from "../context/DrawContext";
+export const useCanvasDrawing = (elements, setElements) => {
     const [drawing, setDrawing] = useState(false);
+    const { tool, color, selectedId, setSelectedId } = useDraw()
+
+    const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
+
 
     const startDrawing = (offsetX, offsetY) => {
         setDrawing(true);
@@ -13,6 +17,26 @@ export const useCanvasDrawing = (elements, setElements, tool, color) => {
             if (target) setElements(elements.filter((ele) => ele.id !== target.id));
             return;
         }
+
+
+        if (tool === "selection") {
+            const target = findElementAtPoint(element, offsetX, offsetY)
+
+            if (target) {
+                setSelectedId(target.id)
+
+                const box = getBoundingBox(target)
+                setDragOffset({ x: offsetX - box.minX, y: offsetY - box.minY })
+            }else { 
+                setSelectedId(null)
+            }
+
+            return
+
+
+        }
+
+        setSelectedId(null)
 
         const id = Date.now();
         const element = createElement(id, tool, offsetX, offsetY, offsetX, offsetY, color);

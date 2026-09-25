@@ -15,4 +15,18 @@ const renderElem = (rc, elements) => {
     });
 }
 
+const renderSelection = (ctx , box) => {
 
+    ctx.save()
+    ctx.strokeStyle = "grey"
+
+    ctx.setLineDash([6,4])
+
+    ctx.lineWidth = 1
+
+    ctx.strokeRect(box.minX - 6 , box.minY - 6 , box.maxX - 12 , box.maxY -12 )
+
+    ctx.restore()
+}
+
+export {renderElem , renderSelection }
