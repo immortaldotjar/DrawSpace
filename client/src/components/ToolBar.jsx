@@ -4,6 +4,8 @@ import { useDraw } from "../context/DrawContext.jsx";
 import ToolButton from "./ToolButton.jsx";
 
 const tools = [
+    
+    { name: "selection", label: "select" },
     { name: "pencil", label: "✎" },
     { name: "line", label: "╱" },
     { name: "rectangle", label: "▭" },
@@ -14,12 +16,22 @@ const tools = [
 const colors = ["#1c1c1c", "#6b7340", "#a9d6a3", "#d6483f", "#3f6bd6"];
 
 const Toolbar = ({ onClear }) => {
-    const { tool, setTool, color, setColor } = useDraw();
+    const { tool, setTool, color, setColor,setSelectedId } = useDraw();
 
+
+    const handleToolSelect = (name ) => {
+        setSelectedId(null)
+        setTool(name)
+    }
+
+    const handleClear = () => {
+        setSelectedId(null)
+        onClear()
+    }
     return (
         <div className="fixed top-md left-1/2 -translate-x-1/2 surface panel row-sm shadow-panel z-10">
             {tools.map((t) => (
-                <ToolButton key={t.name} label={t.label} active={tool === t.name} onClick={() => setTool(t.name)} />
+                <ToolButton key={t.name} label={t.label} active={tool === t.name} onClick={() => handleToolSelect(t.name)} />
             ))}
 
             <div className="divider-x" />
@@ -35,7 +47,7 @@ const Toolbar = ({ onClear }) => {
 
             <div className="divider-x" />
 
-            <ToolButton label="✕" onClick={onClear} />
+            <ToolButton label="✕" onClick={handleClear} />
         </div>
     );
 };
