@@ -36,7 +36,7 @@ body {
   }
 
   .panel {
-    @apply rounded-lg p-sm bg-white;
+    @apply rounded-[8px] p-xs bg-white;
   }
 
   .pill {
@@ -68,7 +68,7 @@ body {
   }
 
   .btn-icon {
-    @apply w-10 h-10 rounded-[8px] flex items-center justify-center text-sm font-medium transition ;
+    @apply w-8 h-8 rounded-[8px] flex items-center justify-center text-sm font-medium transition ;
   }
 
   .btn-icon-active {
@@ -80,7 +80,7 @@ body {
   }
 
   .shadow-panel {
-    @apply shadow-lg;
+    @apply shadow-[0px_0px_5px_lightgrey];
   }
 
   .divider-x {
