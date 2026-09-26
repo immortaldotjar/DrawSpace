@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const VisitContext = createContext();
 
-export const VisitProvider = ({ children }) => {
+const VisitProvider = ({ children }) => {
     const [isFirstVisit, setIsFirstVisit] = useState(null);
 
     useEffect(() => {
@@ -22,4 +22,5 @@ export const VisitProvider = ({ children }) => {
     );
 };
 
+export { VisitProvider }
 export const useVisit = () => useContext(VisitContext);
