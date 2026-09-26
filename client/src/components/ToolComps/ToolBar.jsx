@@ -7,7 +7,7 @@ import { FaRegCircle as Circle } from "react-icons/fa"
 import { LuEraser as Eraser } from "react-icons/lu";
 
 import { BsDashLg as Line} from "react-icons/bs";
-import { useDraw } from "../context/DrawContext.jsx";
+import { useDraw } from "../../context/DrawContext.jsx";
 import ToolButton from "./ToolButton.jsx";
 
 const tools = [
@@ -37,7 +37,7 @@ const Toolbar = ({ onClear }) => {
         onClear()
     }
     return (
-        <div className="fixed top-md left-1/2 -translate-x-1/2 surface panel row-sm shadow-panel z-10">
+        <div className="fixed top-lg left-1/2 -translate-x-1/2 surface panel row-sm shadow-panel z-10">
             {tools.map((t) => (
                 <ToolButton key={t.name} label={t.label} active={tool === t.name} onClick={() => handleToolSelect(t.name)} />
             ))}
