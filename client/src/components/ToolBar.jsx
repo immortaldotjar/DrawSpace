@@ -1,25 +1,33 @@
 import React from "react";
+import { PiCursorClick as Select } from "react-icons/pi";
 
+import { HiPencil as Pencil } from "react-icons/hi2";
+import { TbRectangle as Rectangle } from "react-icons/tb";
+import { FaRegCircle as Circle } from "react-icons/fa"
+import { LuEraser as Eraser } from "react-icons/lu";
+
+import { BsDashLg as Line} from "react-icons/bs";
 import { useDraw } from "../context/DrawContext.jsx";
 import ToolButton from "./ToolButton.jsx";
 
 const tools = [
-    
-    { name: "selection", label: "select" },
-    { name: "pencil", label: "✎" },
-    { name: "line", label: "╱" },
-    { name: "rectangle", label: "▭" },
-    { name: "ellipse", label: "◯" },
-    { name: "eraser", label: "⌫" },
-];
+
+    { name: "selection", label: <Select /> },
+    { name: "pencil", label: <Pencil /> },
+    { name: "line", label: <Line /> },
+    { name: "rectangle", label: <Rectangle /> },
+    { name: "ellipse", label: <Circle /> },
+    { name: "eraser", label: <Eraser /> },
+
+]
 
 const colors = ["#1c1c1c", "#6b7340", "#a9d6a3", "#d6483f", "#3f6bd6"];
 
 const Toolbar = ({ onClear }) => {
-    const { tool, setTool, color, setColor,setSelectedId } = useDraw();
+    const { tool, setTool, color, setColor, setSelectedId } = useDraw();
 
 
-    const handleToolSelect = (name ) => {
+    const handleToolSelect = (name) => {
         setSelectedId(null)
         setTool(name)
     }
@@ -47,7 +55,7 @@ const Toolbar = ({ onClear }) => {
 
             <div className="divider-x" />
 
-            <ToolButton label="✕" onClick={handleClear} />
+            <ToolButton label="X" onClick={handleClear} />
         </div>
     );
 };
