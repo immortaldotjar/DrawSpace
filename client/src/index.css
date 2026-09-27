@@ -84,7 +84,7 @@ body {
   }
 
   .divider-x {
-    @apply w-px h-8 bg-neutral-200 mx-xs;
+    @apply w-8 h-px bg-neutral-200 my-xs;
   }
 
   .canvas-full {
