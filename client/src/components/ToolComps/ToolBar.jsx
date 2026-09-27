@@ -10,6 +10,8 @@ import { BsDashLg as Line} from "react-icons/bs";
 import { useDraw } from "../../context/DrawContext.jsx";
 import ToolButton from "./ToolButton.jsx";
 
+import { RiResetLeftFill as Reset} from "react-icons/ri";
+
 const tools = [
 
     { name: "selection", label: <Select /> },
@@ -37,7 +39,7 @@ const Toolbar = ({ onClear }) => {
         onClear()
     }
     return (
-        <div className="fixed top-lg left-1/2 -translate-x-1/2 surface panel row-sm shadow-panel z-10">
+        <div className="fixed top-md left-xl -translate-x-1/2 surface panel row-sm flex-col shadow-panel z-10">
             {tools.map((t) => (
                 <ToolButton key={t.name} label={t.label} active={tool === t.name} onClick={() => handleToolSelect(t.name)} />
             ))}
@@ -55,7 +57,7 @@ const Toolbar = ({ onClear }) => {
 
             <div className="divider-x" />
 
-            <ToolButton label="X" onClick={handleClear} />
+            <ToolButton label={<Reset/>} onClick={handleClear} />
         </div>
     );
 };
