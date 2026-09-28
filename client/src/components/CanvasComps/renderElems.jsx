@@ -5,7 +5,9 @@ const renderElem = (rc, elements) => {
                 rc.line(ele.points[i].x, ele.points[i].y, ele.points[i + 1].x, ele.points[i + 1].y, {
                     seed: ele.id + i,
                     stroke: ele.color,
-                    roughness: 0.5,
+
+                    roughness: 0,
+                    strokeWidth : 2 ,
                 })
             }
             return
@@ -15,6 +17,7 @@ const renderElem = (rc, elements) => {
             seed: ele.id,
             stroke: ele.color,
             roughness: 0.5,
+            strokeWidth : 2 ,
 
         }
 
