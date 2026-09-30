@@ -23,7 +23,7 @@ const tools = [
 
 ]
 
-const colors = ["#1c1c1c", "#6b7340", "#a9d6a3", "#d6483f", "#3f6bd6"];
+const colors = ["#ffffff", "#e03131", "#2f9e34", "#1971c2", "#f08c00"];
 
 const Toolbar = ({ onClear }) => {
     const { tool, setTool, color, setColor, setSelectedId } = useDraw();
@@ -51,7 +51,7 @@ const Toolbar = ({ onClear }) => {
                     key={c}
                     onClick={() => setColor(c)}
                     style={{ backgroundColor: c }}
-                    className={`w-6 h-6 rounded-full ${color === c ? "ring-2 ring-offset-2 ring-neutral-900" : ""}`}
+                    className={`w-5 h-5 rounded-full ${color === c ? "ring-1 ring-offset-1 ring-neutral-100" : ""}`}
                 />
             ))}
 

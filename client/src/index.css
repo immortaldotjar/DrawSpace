@@ -36,7 +36,7 @@ body {
   }
 
   .panel {
-    @apply rounded-[8px] p-xs bg-white;
+    @apply rounded-[8px] p-xs bg-[#232329];
   }
 
   .pill {
@@ -88,7 +88,7 @@ body {
   }
 
   .canvas-full {
-    @apply w-screen h-screen touch-none bg-white;
+    @apply w-screen h-screen touch-none bg-[#1e1e1e];
   }
 
   .text-editor {
