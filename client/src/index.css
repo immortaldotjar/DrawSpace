@@ -68,23 +68,23 @@ body {
   }
 
   .btn-icon {
-    @apply w-8 h-8 rounded-[8px] flex items-center justify-center text-sm font-medium transition;
+    @apply w-8 h-8 rounded-[8px] flex items-center justify-center text-sm font-medium transition ;
   }
 
   .btn-icon-active {
-    @apply bg-neutral-900 text-white;
+    @apply bg-white/10 text-white;
   }
 
   .btn-icon-idle {
-    @apply bg-neutral-100 text-neutral-700 hover:bg-neutral-200;
+    @apply bg-transparent text-neutral-100 hover:bg-white/10;
   }
 
   .shadow-panel {
-    @apply shadow-[0px_0px_5px_lightgrey];
+    @apply shadow-[(0px_0px_1px_0px_rgba(0,0,0,0.17)),(0px_0px_3px_0px_rgba(0,0,0,0.08)),(0px_7px_14px_0px_rgba(0,0,0,0.05))];
   }
 
   .divider-x {
-    @apply w-8 h-px bg-neutral-200 my-xs;
+    @apply w-8 h-px bg-neutral-100/10 my-xs;
   }
 
   .canvas-full {

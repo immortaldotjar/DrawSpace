@@ -11,7 +11,7 @@ const ZoomControl = () => {
         <div className="fixed bottom-sm right-sm surface panel row-sm flex-col shadow-panel z-10">
             <ToolButton label={<FaMinus/>} onClick={zoomOUT} />
 
-            <button onClick={resetViewScale} className="text-xs text-muted px-xs w-8 flex justify-center items-center">
+            <button onClick={resetViewScale} className="text-xs text-white/60 px-xs w-8 flex justify-center items-center">
                 {Math.round(viewport.scale * 100)}%
             </button>
 
