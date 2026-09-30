@@ -2,15 +2,20 @@ import { TEXT_FONT, TEXT_LINE_HEIGHT } from "./text"
 
 const renderText = (ctx, ele) => {
     const lineHeight = ele.fontSize * TEXT_LINE_HEIGHT
+    const leading = (lineHeight - ele.fontSize) / 2
+    const ascent = ele.fontSize * 0.79
+
 
     ctx.save()
     ctx.font = `${ele.fontSize}px ${TEXT_FONT}`
 
     ctx.fillStyle = ele.color
-    ctx.textBaseline = "middle"
+    ctx.textBaseline = "alphabetic"
 
     ele.text.split("\n").forEach((line, i) => {
-        ctx.fillText(line, ele.x, ele.y + i * lineHeight + lineHeight / 2)
+
+        const lineTop = ele.y + i * lineHeight
+        ctx.fillText(line, ele.x,lineTop + leading + ascent)
 
 
     })
