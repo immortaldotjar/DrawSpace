@@ -4,17 +4,21 @@ import { useDraw } from "../../context/DrawContext"
 import { useViewport } from "../../context/ViewportContext"
 import { renderElem, renderSelection } from "./renderElems"
 import { screenToWorld } from "./viewport"
-import { getBoundingBox } from "./geometry"
+import { findElementAtPoint, getBoundingBox } from "./geometry"
 import { useCanvasDrawing } from "../../hooks/useCanvasDrawing"
+import { TEXT_SIZE } from "./text"
+import { createTextElement } from "./elements"
+import TextEditor from "./TextEditor"
 
 const Canvas = ({ elements, setElements }) => {
     const canvasRef = useRef(null)
     const lastPointRef = useRef({ x: 0, y: 0 })
-    const { tool, selectedId, setSelectedId } = useDraw()
+    const { tool, color, selectedId, setSelectedId } = useDraw()
     const { viewport, setViewport } = useViewport()
     const { startDrawing, continueDrawing, stopDrawing } = useCanvasDrawing(elements, setElements)
     const [spacePressed, setSpacePressed] = useState(false)
     const [isPanning, setIsPanning] = useState(false)
+    const [editing, setEditing] = useState(null)
 
     useEffect(() => {
         const canvas = canvasRef.current
@@ -28,23 +32,24 @@ const Canvas = ({ elements, setElements }) => {
         ctx.scale(viewport.scale, viewport.scale)
 
         const rc = rough.canvas(canvas)
-        renderElem(rc, elements)
+        renderElem(rc, elements.filter((ele) => ele.id !== editing?.id))
 
         const selected = elements.find((ele) => ele.id === selectedId)
         if (selected) renderSelection(ctx, getBoundingBox(selected), viewport.scale)
 
         ctx.restore()
-    }, [elements, selectedId, viewport])
+    }, [elements, selectedId, viewport, editing])
 
     useEffect(() => {
         const handleKeyDown = (e) => {
+            if (e.target.tagName === "TEXTAREA") return
             if (e.code === "Space") setSpacePressed(true)
             if ((e.key === "Delete" || e.key === "Backspace") && selectedId) {
                 setElements((prev) => prev.filter((ele) => ele.id !== selectedId))
                 setSelectedId(null)
             }
         }
-        
+
         const handleKeyUp = (e) => {
             if (e.code === "Space") setSpacePressed(false)
         }
@@ -82,6 +87,8 @@ const Canvas = ({ elements, setElements }) => {
     }, [setViewport])
 
     const handleMouseDown = (e) => {
+        if (editing) return
+
         if (spacePressed) {
             setIsPanning(true)
             lastPointRef.current = { x: e.clientX, y: e.clientY }
@@ -90,7 +97,6 @@ const Canvas = ({ elements, setElements }) => {
         const world = screenToWorld(e.nativeEvent.offsetX, e.nativeEvent.offsetY, viewport)
         startDrawing(world.x, world.y)
     }
-
     const handleMouseMove = (e) => {
         if (isPanning) {
             const dx = e.clientX - lastPointRef.current.x
@@ -108,6 +114,50 @@ const Canvas = ({ elements, setElements }) => {
         stopDrawing()
     }
 
+    const handleDbClick = (e) => {
+        if (spacePressed || editing) return
+
+        const world = screenToWorld(e.nativeEvent.offsetX, e.nativeEvent.offsetY, viewport)
+        const target = findElementAtPoint(elements, world.x, world.y)
+
+        setSelectedId(null)
+
+        if (target && target.type === "text") {
+            setEditing({
+                id: target.id,
+                x: target.x,
+                y: target.y,
+                text: target.text,
+                fontSize: target.fontSize,
+                color: target.color,
+            })
+            return
+        }
+
+        setEditing({
+            id: null,
+            x: world.x,
+            y: world.y,
+            text: "",
+            fontSize: TEXT_SIZE,
+            color,
+        })
+    }
+
+    const handleTextCommit = (val) => {
+        const isEmpty = val.trim() === ""
+
+        if (editing.id && isEmpty) {
+            setElements((prev) => prev.filter((ele) => ele.id !== editing.id))
+        } else if (editing.id) {
+            setElements((prev) => prev.map((ele) => (ele.id === editing.id ? { ...ele, text: val } : ele)))
+        } else if (!isEmpty) {
+            setElements((prev) => [...prev, createTextElement(Date.now(), editing.x, editing.y, val, editing.color)])
+        }
+
+        setEditing(null)
+    }
+
     const cursorClass = spacePressed
         ? isPanning
             ? "cursor-grabbing"
@@ -117,14 +167,28 @@ const Canvas = ({ elements, setElements }) => {
             : ""
 
     return (
-        <canvas
-            ref={canvasRef}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            className={`canvas-full ${cursorClass}`}
-        />
+        <>
+            <canvas
+                ref={canvasRef}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onDoubleClick={handleDbClick}
+                className={`canvas-full ${cursorClass}`}
+            />
+            {editing && (
+                <TextEditor
+                    key={editing.id ?? "new"}
+                    left={editing.x * viewport.scale + viewport.x}
+                    top={editing.y * viewport.scale + viewport.y}
+                    initialText={editing.text}
+                    fontSize={editing.fontSize}
+                    color={editing.color}
+                    scale={viewport.scale}
+                    onCommit={handleTextCommit}
+                />
+            )}
+        </>
     )
 }
-
 export default Canvas

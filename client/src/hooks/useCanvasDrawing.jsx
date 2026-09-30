@@ -1,22 +1,20 @@
-import { useState } from "react"
-import { createElement, moveElement } from "../components/CanvasComps/elements"
+import { useRef, useState } from "react"
+import { createElement, moveElement, isElementEmpty } from "../components/CanvasComps/elements"
 import { findElementAtPoint, getBoundingBox } from "../components/CanvasComps/geometry"
 import { useDraw } from "../context/DrawContext"
 
 const useCanvasDrawing = (elements, setElements) => {
     const { tool, color, selectedId, setSelectedId } = useDraw()
 
-
     const [drawing, setDrawing] = useState(false)
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
+    const currentIdRef = useRef(null)
 
     const startDrawing = (offsetX, offsetY) => {
         setDrawing(true)
 
-
         if (tool === "eraser") {
             const target = findElementAtPoint(elements, offsetX, offsetY)
-
             if (target) setElements(elements.filter((ele) => ele.id !== target.id))
             return
         }
@@ -25,12 +23,9 @@ const useCanvasDrawing = (elements, setElements) => {
             const target = findElementAtPoint(elements, offsetX, offsetY)
             if (target) {
                 setSelectedId(target.id)
-
                 const box = getBoundingBox(target)
-
                 setDragOffset({ x: offsetX - box.minX, y: offsetY - box.minY })
             } else {
-
                 setSelectedId(null)
             }
             return
@@ -38,9 +33,9 @@ const useCanvasDrawing = (elements, setElements) => {
 
         setSelectedId(null)
         const id = Date.now()
+        currentIdRef.current = id
         const element = createElement(id, tool, offsetX, offsetY, offsetX, offsetY, color)
         setElements([...elements, element])
-
     }
 
     const continueDrawing = (offsetX, offsetY) => {
@@ -62,21 +57,23 @@ const useCanvasDrawing = (elements, setElements) => {
             return
         }
 
-        setElements((prev) => {
-            const updated = [...prev]
-            const last = updated[updated.length - 1]
-
-            if (tool === "pencil") {
-                last.points = [...last.points, { x: offsetX, y: offsetY }]
-            } else {
-                updated[updated.length - 1] = createElement(last.id, tool, last.x1, last.y1, offsetX, offsetY, last.color)
-            }
-
-            return updated
-        })
+        setElements((prev) =>
+            prev.map((ele) => {
+                if (ele.id !== currentIdRef.current) return ele
+                if (tool === "pencil") return { ...ele, points: [...ele.points, { x: offsetX, y: offsetY }] }
+                return createElement(ele.id, tool, ele.x1, ele.y1, offsetX, offsetY, ele.color)
+            })
+        )
     }
 
-    const stopDrawing = () => setDrawing(false)
+    const stopDrawing = () => {
+        setDrawing(false)
+        currentIdRef.current = null
+        setElements((prev) => {
+            const next = prev.filter((ele) => !isElementEmpty(ele))
+            return next.length === prev.length ? prev : next
+        })
+    }
 
     return { startDrawing, continueDrawing, stopDrawing }
 }

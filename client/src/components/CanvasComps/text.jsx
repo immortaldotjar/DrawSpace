@@ -2,7 +2,7 @@ import React from 'react'
 
 const measureCtx = document.createElement("canvas").getContext("2d")
 
-const TEXT_FONT = "system-ui, sans-serif"
+const TEXT_FONT = "monospace"
 const TEXT_SIZE = 20
 const TEXT_LINE_HEIGHT = 1.25
 
@@ -11,7 +11,7 @@ const getTextSize = (ele) => {
     const lines = ele.text.split("\n")
 
     const width = Math.max(...lines.map((line) => {
-        measureCtx.measureText(line).width
+        return measureCtx.measureText(line).width
     }))
 
     const height = lines.length * ele.fontSize * TEXT_LINE_HEIGHT

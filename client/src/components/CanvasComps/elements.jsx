@@ -46,13 +46,9 @@ const createTextElement = (id, x, y, text, color) => {
 }
 
 const isElementEmpty = (ele) => {
-  if (ele.type === "pencil") {
-    return ele.points.length < 2
-  }
-
-  if (ele.type === "text") {
-    return ele.x1 === ele.x2 && ele.y1 === ele.y2
-  }
+  if (ele.type === "pencil") return ele.points.length < 2
+  if (ele.type === "text") return ele.text.trim() === ""
+  return ele.x1 === ele.x2 && ele.y1 === ele.y2
 }
 
 export { createElement, moveElement, createTextElement, isElementEmpty };
