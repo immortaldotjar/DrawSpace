@@ -1,5 +1,31 @@
+import { TEXT_FONT, TEXT_LINE_HEIGHT } from "./text"
+
+const renderText = (ctx, ele) => {
+    const lineHeight = ele.fontSize * TEXT_LINE_HEIGHT
+
+    ctx.save()
+    ctx.font = `${ele.fontSize}px ${TEXT_FONT}`
+
+    ctx.fillStyle = ele.color
+    ctx.textBaseline = "middle"
+
+    ele.text.split("\n").forEach((line, i) => {
+        ctx.fillText(line, ele.x, ele.y + i * lineHeight + lineHeight / 2)
+
+
+    })
+
+    ctx.restore()
+}
+
 const renderElem = (rc, elements) => {
     elements.forEach((ele) => {
+
+        if (ele.type === "text") {
+            renderText(rc.canvas.getContext("2d"), ele)
+            return
+        }
+
         if (ele.type === "pencil") {
             for (let i = 0; i < ele.points.length - 1; i++) {
                 rc.line(ele.points[i].x, ele.points[i].y, ele.points[i + 1].x, ele.points[i + 1].y, {
@@ -7,7 +33,7 @@ const renderElem = (rc, elements) => {
                     stroke: ele.color,
 
                     roughness: 0,
-                    strokeWidth : 2 ,
+                    strokeWidth: 2,
                 })
             }
             return
@@ -17,7 +43,7 @@ const renderElem = (rc, elements) => {
             seed: ele.id,
             stroke: ele.color,
             roughness: 0.5,
-            strokeWidth : 2 ,
+            strokeWidth: 2,
 
         }
 
@@ -31,12 +57,12 @@ const renderElem = (rc, elements) => {
     })
 }
 
-const renderSelection = (ctx, box,scale) => {
+const renderSelection = (ctx, box, scale) => {
     ctx.save()
 
     ctx.strokeStyle = "grey"
     ctx.setLineDash([6 / scale, 4 / scale])
-    ctx.lineWidth = 1 /scale
+    ctx.lineWidth = 1 / scale
 
     const pad = 6 / scale
     ctx.strokeRect(box.minX - pad, box.minY - pad, box.maxX - box.minX + pad * 2, box.maxY - box.minY + pad * 2)

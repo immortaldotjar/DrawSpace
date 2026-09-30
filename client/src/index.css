@@ -68,7 +68,7 @@ body {
   }
 
   .btn-icon {
-    @apply w-8 h-8 rounded-[8px] flex items-center justify-center text-sm font-medium transition ;
+    @apply w-8 h-8 rounded-[8px] flex items-center justify-center text-sm font-medium transition;
   }
 
   .btn-icon-active {
@@ -89,6 +89,10 @@ body {
 
   .canvas-full {
     @apply w-screen h-screen touch-none bg-white;
+  }
+
+  .text-editor {
+    @apply fixed m-0 p-0 border-0 outline-none bg-transparent resize-none overflow-hidden whitespace-pre z-20;
   }
 
   .text-muted {
