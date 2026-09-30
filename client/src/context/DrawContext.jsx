@@ -4,7 +4,7 @@ const DrawContext = createContext();
 
 const DrawProvider = ({ children }) => {
   const [tool, setTool] = useState("pencil");
-  const [color, setColor] = useState("#1c1c1c");
+  const [color, setColor] = useState("#ffffff");
   const [selectedId, setSelectedId] = useState(null);
 
   return (

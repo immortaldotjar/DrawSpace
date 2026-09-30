@@ -18,24 +18,48 @@ const renderText = (ctx, ele) => {
     ctx.restore()
 }
 
+const renderPencil = (ctx, ele) => {
+    const pts = ele.points
+
+    if (pts.length < 2) return
+
+    ctx.save()
+    ctx.strokeStyle = ele.color
+    ctx.lineWidth = 2
+    ctx.lineJoin = "round"
+    ctx.lineCap = "round"
+
+    ctx.beginPath()
+    ctx.moveTo(pts[0].x, pts[0].y)
+
+
+    for (let i = 1; i < pts.length - 1; i++) {
+
+        const midX = (pts[i].x + pts[i + 1].x) / 2
+        const midY = (pts[i].y + pts[i + 1].y) / 2
+
+        ctx.quadraticCurveTo(pts[i].x, pts[i].y, midX, midY)
+
+
+
+    }
+
+    ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y)
+    ctx.stroke()
+    ctx.restore()
+}
+
 const renderElem = (rc, elements) => {
     elements.forEach((ele) => {
+        const ctx = rc.canvas.getContext("2d")
 
         if (ele.type === "text") {
-            renderText(rc.canvas.getContext("2d"), ele)
+            renderText(ctx, ele)
             return
         }
 
         if (ele.type === "pencil") {
-            for (let i = 0; i < ele.points.length - 1; i++) {
-                rc.line(ele.points[i].x, ele.points[i].y, ele.points[i + 1].x, ele.points[i + 1].y, {
-                    seed: ele.id + i,
-                    stroke: ele.color,
-
-                    roughness: 0,
-                    strokeWidth: 2,
-                })
-            }
+            renderPencil(ctx, ele)
             return
         }
 
@@ -60,7 +84,7 @@ const renderElem = (rc, elements) => {
 const renderSelection = (ctx, box, scale) => {
     ctx.save()
 
-    ctx.strokeStyle = "grey"
+    ctx.strokeStyle = "white"
     ctx.setLineDash([6 / scale, 4 / scale])
     ctx.lineWidth = 1 / scale
 
