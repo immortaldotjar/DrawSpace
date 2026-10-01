@@ -32,7 +32,9 @@ const useCanvasDrawing = (elements, setElements) => {
         }
 
         setSelectedId(null)
+
         const id = Date.now()
+        
         currentIdRef.current = id
         const element = createElement(id, tool, offsetX, offsetY, offsetX, offsetY, color)
         setElements([...elements, element])

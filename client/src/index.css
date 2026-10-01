@@ -24,7 +24,7 @@ body {
 
 @layer components {
   .frame {
-    @apply p-md md:p-lg;
+    @apply p-md md:p-sm;
   }
 
   .surface {
@@ -40,7 +40,7 @@ body {
   }
 
   .pill {
-    @apply rounded-full px-lg py-sm;
+    @apply rounded-[10px] px-lg py-xs;
   }
 
   .stack-sm {
@@ -64,7 +64,7 @@ body {
   }
 
   .btn-circle {
-    @apply w-9 h-9 rounded-full;
+    @apply w-8 h-8 rounded-full;
   }
 
   .btn-icon {
