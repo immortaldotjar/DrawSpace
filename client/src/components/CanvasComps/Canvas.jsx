@@ -9,6 +9,7 @@ import { useCanvasDrawing } from "../../hooks/useCanvasDrawing"
 import { TEXT_SIZE } from "./text"
 import { createTextElement } from "./elements"
 import TextEditor from "./TextEditor"
+import TextLayer from "./TextLayer"
 
 const Canvas = ({ elements, setElements }) => {
     const canvasRef = useRef(null)
@@ -32,7 +33,7 @@ const Canvas = ({ elements, setElements }) => {
         ctx.scale(viewport.scale, viewport.scale)
 
         const rc = rough.canvas(canvas)
-        renderElem(rc, elements.filter((ele) => ele.id !== editing?.id))
+        renderElem(rc, elements)
 
         const selected = elements.find((ele) => ele.id === selectedId)
         if (selected) renderSelection(ctx, getBoundingBox(selected), viewport.scale)
@@ -176,6 +177,8 @@ const Canvas = ({ elements, setElements }) => {
                 onDoubleClick={handleDbClick}
                 className={`canvas-full ${cursorClass}`}
             />
+
+            <TextLayer elements={elements} viewport={viewport} editingId={editing?.id}/>
             {editing && (
                 <TextEditor
                     key={editing.id ?? "new"}

@@ -68,7 +68,7 @@ body {
   }
 
   .btn-icon {
-    @apply w-8 h-8 rounded-[8px] flex items-center justify-center text-sm font-medium transition ;
+    @apply w-8 h-8 rounded-[8px] flex items-center justify-center text-sm font-medium transition;
   }
 
   .btn-icon-active {
@@ -80,7 +80,7 @@ body {
   }
 
   .shadow-panel {
-    @apply shadow-[(0px_0px_1px_0px_rgba(0,0,0,0.17)),(0px_0px_3px_0px_rgba(0,0,0,0.08)),(0px_7px_14px_0px_rgba(0,0,0,0.05))];
+    @apply shadow-[0px_0px_1px_grey]
   }
 
   .divider-x {
@@ -88,11 +88,15 @@ body {
   }
 
   .canvas-full {
-    @apply w-screen h-screen touch-none bg-[#1e1e1e];
+    @apply w-screen h-screen touch-none bg-[#111];
   }
 
   .text-editor {
     @apply fixed m-0 p-0 border-0 outline-none bg-transparent resize-none overflow-hidden whitespace-pre z-20;
+  }
+
+  .text-layer-item {
+    @apply fixed m-0 p-0 whitespace-pre pointer-events-none select-none z-10;
   }
 
   .text-muted {
