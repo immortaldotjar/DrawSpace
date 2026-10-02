@@ -39,7 +39,7 @@ const Canvas = ({ elements, setElements }) => {
         if (selected) renderSelection(ctx, getBoundingBox(selected), viewport.scale)
 
         ctx.restore()
-    }, [elements, selectedId, viewport, editing])
+    }, [elements, selectedId, viewport])
 
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -87,6 +87,39 @@ const Canvas = ({ elements, setElements }) => {
         return () => canvas.removeEventListener("wheel", handleWheel)
     }, [setViewport])
 
+    useEffect(() => {
+        const handleWindowMouseMove = (e) => {
+            const canvas = canvasRef.current
+            const rect = canvas.getBoundingClientRect()
+            const offsetX = e.clientX - rect.left
+            const offsetY = e.clientY - rect.top
+
+            if (isPanning) {
+                const dx = e.clientX - lastPointRef.current.x
+                const dy = e.clientY - lastPointRef.current.y
+                lastPointRef.current = { x: e.clientX, y: e.clientY }
+                setViewport((prev) => ({ ...prev, x: prev.x + dx, y: prev.y + dy }))
+                return
+            }
+
+            const world = screenToWorld(offsetX, offsetY, viewport)
+            continueDrawing(world.x, world.y)
+        }
+
+        const handleWindowMouseUp = () => {
+            setIsPanning(false)
+            stopDrawing()
+        }
+
+        window.addEventListener("mousemove", handleWindowMouseMove)
+        window.addEventListener("mouseup", handleWindowMouseUp)
+
+        return () => {
+            window.removeEventListener("mousemove", handleWindowMouseMove)
+            window.removeEventListener("mouseup", handleWindowMouseUp)
+        }
+    }, [isPanning, viewport, continueDrawing, stopDrawing, setViewport])
+
     const handleMouseDown = (e) => {
         if (editing) return
 
@@ -97,22 +130,6 @@ const Canvas = ({ elements, setElements }) => {
         }
         const world = screenToWorld(e.nativeEvent.offsetX, e.nativeEvent.offsetY, viewport)
         startDrawing(world.x, world.y)
-    }
-    const handleMouseMove = (e) => {
-        if (isPanning) {
-            const dx = e.clientX - lastPointRef.current.x
-            const dy = e.clientY - lastPointRef.current.y
-            lastPointRef.current = { x: e.clientX, y: e.clientY }
-            setViewport((prev) => ({ ...prev, x: prev.x + dx, y: prev.y + dy }))
-            return
-        }
-        const world = screenToWorld(e.nativeEvent.offsetX, e.nativeEvent.offsetY, viewport)
-        continueDrawing(world.x, world.y)
-    }
-
-    const handleMouseUp = () => {
-        setIsPanning(false)
-        stopDrawing()
     }
 
     const handleDbClick = (e) => {
@@ -172,13 +189,10 @@ const Canvas = ({ elements, setElements }) => {
             <canvas
                 ref={canvasRef}
                 onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
                 onDoubleClick={handleDbClick}
                 className={`canvas-full ${cursorClass}`}
             />
-
-            <TextLayer elements={elements} viewport={viewport} editingId={editing?.id}/>
+            <TextLayer elements={elements} viewport={viewport} editingId={editing?.id} />
             {editing && (
                 <TextEditor
                     key={editing.id ?? "new"}
@@ -194,4 +208,5 @@ const Canvas = ({ elements, setElements }) => {
         </>
     )
 }
+
 export default Canvas

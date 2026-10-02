@@ -1,6 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Delicious+Handrawn&display=swap');
+
 @import "tailwindcss";
 
+@font-face {
+  font-family: Handrawn;
+  src: url(./assets/Handrawn.ttf);
+}
+
+
+/* :root {
+  --hero-clip: polygon(100% 26%,100% 100%,33% 100%,32% 70%,0% 70%,0% 0%,74% 0%,74% 26%);
+} */
+
+@layer utilities {
+  .clip-hero {
+    clip-path: polygon(100% 26%, 100% 100%, 33% 100%, 32% 70%, 0% 70%, 0% 0%, 74% 0%, 74% 26%);
+  }
+}
+
 @theme {
+
+  /* --hero-clip: polygon(100% 26%,100% 100%,33% 100%,32% 70%,0% 70%,0% 0%,74% 0%,74% 26%); */
+
+  --font-hand: 'Handrawn';
+
   --color-brand: #6b7340;
   --color-brand-dark: #4f5730;
   --color-cream: #f7f3d6;
@@ -21,6 +44,7 @@
 body {
   @apply bg-white text-neutral-900 antialiased;
 }
+
 
 @layer components {
   .frame {

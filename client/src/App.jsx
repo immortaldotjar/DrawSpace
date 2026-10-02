@@ -16,8 +16,8 @@ const App = () => {
           isFirstVisit ? (
             <Home onEnter={markVisited} />
           ) : (
-            <Home/>
-            // <Navigate to="/board" replace />
+            // <Home/>
+            <Navigate to="/board" replace />
           )
         }
       />
