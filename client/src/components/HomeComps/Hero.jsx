@@ -3,11 +3,19 @@ import { motion } from "motion/react";
 const Hero = ({ onStart }) => {
   return (
     <>
+        <clipPath id="clip-hero" clipPathUnits={'objectBoundingBox'}>
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M0.0249688 0C0.0111789 0 0 0.0112775 0 0.0251889V0.851385C0 0.865297 0.0111789 0.876574 0.0249688 0.876574H0.179775V0.974811C0.179775 0.988723 0.190954 1 0.204744 1H0.975031C0.988821 1 1 0.988723 1 0.974811V0.157431C1 0.143519 0.988821 0.132242 0.975031 0.132242H0.810237V0.0251889C0.810237 0.0112775 0.799058 0 0.785268 0H0.0249688Z"
+            fill="#D9D9D9"
+          />
+        </clipPath>
       <h1 className="text-brand-dark font-black text-[16vw] md:text-[9vw] leading-none tracking-tight mt-lg select-none">
         DRAWSPACE
       </h1>
 
-      <div className="relative bg-brand-dark surface mt-md h-[60vh] md:h-[65vh] overflow-hidden flex items-center justify-center">
+      <div className=" bg-white/20 h-screen" style={{clipPath:`url(#clip-hero)`}}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -16,7 +24,6 @@ const Hero = ({ onStart }) => {
         >
           pencil animation here
         </motion.div>
-
         <div className="absolute top-lg right-lg w-20 h-20 rounded-full bg-neutral-900 flex items-center justify-center">
           <motion.span
             animate={{ rotate: 360 }}
@@ -39,4 +46,4 @@ const Hero = ({ onStart }) => {
   );
 };
 
-export default Hero;
+export default Hero
