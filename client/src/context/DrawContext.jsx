@@ -5,10 +5,10 @@ const DrawContext = createContext();
 const DrawProvider = ({ children }) => {
   const [tool, setTool] = useState("pencil");
   const [color, setColor] = useState("#ffffff");
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   return (
-    <DrawContext.Provider value={{ tool, setTool, color, setColor, selectedId, setSelectedId }}>
+    <DrawContext.Provider value={{ tool, setTool, color, setColor, selectedIds, setSelectedIds }}>
       {children}
     </DrawContext.Provider>
   );

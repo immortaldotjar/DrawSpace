@@ -26,16 +26,16 @@ const tools = [
 const colors = ["#ffffff", "#e03131", "#2f9e34", "#1971c2", "#f08c00"];
 
 const Toolbar = ({ onClear }) => {
-    const { tool, setTool, color, setColor, setSelectedId } = useDraw();
+    const { tool, setTool, color, setColor, setSelectedIds } = useDraw();
 
 
     const handleToolSelect = (name) => {
-        setSelectedId(null)
+        setSelectedIds([])
         setTool(name)
     }
 
     const handleClear = () => {
-        setSelectedId(null)
+        setSelectedIds([])
         onClear()
     }
     return (
