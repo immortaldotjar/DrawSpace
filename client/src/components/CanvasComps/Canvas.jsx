@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import rough from "roughjs"
 import { useDraw } from "../../context/DrawContext"
 import { useViewport } from "../../context/ViewportContext"
-import { renderElem, renderSelection } from "./renderElems"
+import { renderElem, renderSelection, renderMarquee } from "./renderElems"
 import { screenToWorld } from "./viewport"
 import { findElementAtPoint, getBoundingBox } from "./geometry"
 import { useCanvasDrawing } from "../../hooks/useCanvasDrawing"
@@ -14,9 +14,11 @@ import TextLayer from "./TextLayer"
 const Canvas = ({ elements, setElements }) => {
     const canvasRef = useRef(null)
     const lastPointRef = useRef({ x: 0, y: 0 })
-    const { tool, color, selectedId, setSelectedId } = useDraw()
+    const { tool, color, selectedIds, setSelectedIds } = useDraw()
     const { viewport, setViewport } = useViewport()
-    const { startDrawing, continueDrawing, stopDrawing } = useCanvasDrawing(elements, setElements)
+
+    const { startDrawing, continueDrawing, stopDrawing, selectionBox } = useCanvasDrawing(elements, setElements)
+
     const [spacePressed, setSpacePressed] = useState(false)
     const [isPanning, setIsPanning] = useState(false)
     const [editing, setEditing] = useState(null)
@@ -35,19 +37,31 @@ const Canvas = ({ elements, setElements }) => {
         const rc = rough.canvas(canvas)
         renderElem(rc, elements)
 
-        const selected = elements.find((ele) => ele.id === selectedId)
-        if (selected) renderSelection(ctx, getBoundingBox(selected), viewport.scale)
+        selectedIds.forEach((id) => {
+            const selected = elements.find((ele) => ele.id === id)
+            if (selected) renderSelection(ctx, getBoundingBox(selected), viewport.scale)
+        })
+
+        if (selectionBox) {
+            const box = {
+                minX: Math.min(selectionBox.x1, selectionBox.x2),
+                minY: Math.min(selectionBox.y1, selectionBox.y2),
+                maxX: Math.max(selectionBox.x1, selectionBox.x2),
+                maxY: Math.max(selectionBox.y1, selectionBox.y2),
+            }
+            renderMarquee(ctx, box, viewport.scale)
+        }
 
         ctx.restore()
-    }, [elements, selectedId, viewport])
+    }, [elements, selectedIds, viewport, selectionBox])
 
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.target.tagName === "TEXTAREA") return
             if (e.code === "Space") setSpacePressed(true)
-            if ((e.key === "Delete" || e.key === "Backspace") && selectedId) {
-                setElements((prev) => prev.filter((ele) => ele.id !== selectedId))
-                setSelectedId(null)
+            if ((e.key === "Delete" || e.key === "Backspace") && selectedIds.length) {
+                setElements((prev) => prev.filter((ele) => !selectedIds.includes(ele.id)))
+                setSelectedIds([])
             }
         }
 
@@ -62,7 +76,7 @@ const Canvas = ({ elements, setElements }) => {
             window.removeEventListener("keydown", handleKeyDown)
             window.removeEventListener("keyup", handleKeyUp)
         }
-    }, [selectedId, setElements, setSelectedId])
+    }, [selectedIds, setElements, setSelectedIds])
 
     useEffect(() => {
         const canvas = canvasRef.current
@@ -138,7 +152,7 @@ const Canvas = ({ elements, setElements }) => {
         const world = screenToWorld(e.nativeEvent.offsetX, e.nativeEvent.offsetY, viewport)
         const target = findElementAtPoint(elements, world.x, world.y)
 
-        setSelectedId(null)
+        setSelectedIds([])
 
         if (target && target.type === "text") {
             setEditing({
@@ -181,7 +195,7 @@ const Canvas = ({ elements, setElements }) => {
             ? "cursor-grabbing"
             : "cursor-grab"
         : tool === "selection"
-            ? "cursor-move"
+            ? ""
             : ""
 
     return (

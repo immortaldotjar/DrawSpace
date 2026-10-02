@@ -75,5 +75,24 @@ const renderSelection = (ctx, box, scale) => {
     ctx.restore()
 }
 
+const renderMarquee = (ctx, box, scale) => {
+    ctx.save()
 
-export { renderElem, renderSelection }
+    ctx.fillStyle = "rgba(255, 255, 255, 0.02)"
+    ctx.strokeStyle = "white"
+
+    ctx.lineWidth = 1 / scale
+
+    const rad = 6 / scale
+    // ctx.fillRect(box.minX, box.minY, box.maxX - box.minX, box.maxY - box.minY)
+    // ctx.strokeRect(box.minX, box.minY, box.maxX - box.minX, box.maxY - box.minY)
+
+    ctx.beginPath()
+    ctx.roundRect(box.minX, box.minY, box.maxX - box.minX, box.maxY - box.minY,rad)
+    ctx.fill()
+    ctx.stroke()
+
+    ctx.restore()
+}
+
+export { renderElem, renderSelection, renderMarquee }
